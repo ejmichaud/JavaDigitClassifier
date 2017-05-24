@@ -1,7 +1,6 @@
 package networkclasses;
 
 import java.util.Random;
-import networkclasses.Matrix.Matrix;
 
 public class Operations {
     public Operations() {}

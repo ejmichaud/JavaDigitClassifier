@@ -1,15 +1,26 @@
 import networkclasses.*;
+import guis.*;
 
 import java.io.FileNotFoundException;
 import  java.io.IOException;
 
 public class Main {
     public static void main (String[] args) throws IOException, FileNotFoundException {
+				Network net = new Network("params/parameters9694.txt");
+				GUI show = new GUI();
+				show.showMouseListener();
+
+
 		/*** THE NETWORK LAYER SIZES ***/
+
+
+
+		/*
 		int[] sizes = {784, 300, 10};
+		*/
 
 		/*** COLLECT AND PROCESS TRAINING AND TEST DATA ***/
-
+		/*
 		Matrix[] training_images = Data.get_images("/Users/Eric/Desktop/MNIST/training_images");
 		System.out.println("Done importing training images");
 		Matrix[] training_labels = Data.labels_to_matrices(Data.get_labels("/Users/Eric/Desktop/MNIST/training_labels"));
@@ -30,9 +41,7 @@ public class Main {
 		System.out.println("Done processing " + training_data.length + " training datas");
 
 		/*** INITIALIZE, TRAIN, AND SAVE NETWORK ***/
-		Network net = new Network(sizes);
-		net.SGD(training_data, 10, 10, 0.2, test_images, test_labels);
-		net.save("/Users/Eric/Desktop/new_parameters.txt");
+
 		/*** INITIALIZE AND TEST NETWORK ***/
 		/*
 		Network net = new Network("/Users/Eric/Desktop/parameters9660.txt");

@@ -80,4 +80,68 @@ public class Operations {
         }
         return array;
     }
+
+		public static Matrix shiftLeft(Matrix m) {
+			Matrix a = new Matrix(28, 28, false);
+			for (int i = 0; i < 27; i++) {
+				for (int j = 0; j < 27; j++) {
+					a.matrix[i][j] = m.matrix[i][j+1];
+				}
+			}
+			return a;
+		}
+
+		public static Matrix shiftRight(Matrix m) {
+			Matrix a = new Matrix(28, 28, false);
+			for (int i = 1; i < 28; i++) {
+				for (int j = 1; j < 28; j++) {
+					a.matrix[i][j] = m.matrix[i][j-1];
+				}
+			}
+			return a;
+		}
+
+		public static Matrix shiftUp(Matrix m) {
+			Matrix a = new Matrix(28, 28, false);
+			for (int i = 0; i < 27; i++) {
+				for (int j = 0; j < 27; j++) {
+					a.matrix[i][j] = m.matrix[i+1][j];
+				}
+			}
+			return a;
+		}
+
+		public static Matrix shiftDown(Matrix m) {
+			Matrix a = new Matrix(28, 28, false);
+			for (int i = 1; i < 28; i++) {
+				for (int j = 1; j < 28; j++) {
+					a.matrix[i][j] = m.matrix[i-1][j];
+				}
+			}
+			return a;
+		}
+
+		public static double getCenterX(Matrix m) {
+			double x = 0;
+			double sum = 0;
+			for (int i = 0; i < m.rows; i++) {
+				for (int j = 0; j < m.columns; j++) {
+					sum += m.matrix[i][j];
+					x += j * m.matrix[i][j];
+				}
+			}
+			return x / sum;
+		}
+
+		public static double getCenterY(Matrix m) {
+			double y = 0;
+			double sum = 0;
+			for (int i = 0; i < m.rows; i++) {
+				for (int j = 0; j < m.columns; j++) {
+					sum += m.matrix[i][j];
+					y += i * m.matrix[i][j];
+				}
+			}
+			return y / sum;
+		}
 }

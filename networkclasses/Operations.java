@@ -144,4 +144,80 @@ public class Operations {
 			}
 			return y / sum;
 		}
+
+		public static Matrix normalize(Matrix m) {
+			//compute differences
+			int xDiff = 14 - (int) Math.round(getCenterX(m));
+			int yDiff = 14 - (int) Math.round(getCenterY(m));
+			//do the shifting
+			if (xDiff < 0) {
+				for (int i = 0; i < -xDiff; i++) {
+					m = shiftLeft(m);
+				}
+			} else {
+				for (int i = 0; i < xDiff; i++) {
+					m = shiftRight(m);
+				}
+			}
+
+			if (yDiff < 0) {
+				for (int i = 0; i < -yDiff; i++) {
+					m = shiftUp(m);
+				}
+			} else {
+				for (int i = 0; i < yDiff; i++) {
+					m = shiftDown(m);
+				}
+			}
+			//all done shifting!
+			return m;
+		}
+
+		/*
+		public static double getRadius(Matrix m) {
+			double radSum = 0;
+			double sum = 0;
+			for (int r = 0; r < m.rows; r++) {
+				for (int c = 0; c < m.columns; c++) {
+					double xCoor = c - 14 + 0.5;
+					double yCoor = 14 - r - 0.5;
+					radSum += Math.sqrt(Math.pow(xCoor, 2) + Math.pow(yCoor,2)) * m.matrix[r][c];
+					sum += m.matrix[r][c];
+				}
+			}
+			return radSum / sum;
+		}
+
+		public static Matrix stretch(Matrix m) {
+			Matrix a = new Matrix(28,28,false);
+			double factor = 6.25 / getRadius(m);
+			for (int r = 0; r < 28; r++) {
+				for (int c = 0; c < 28; c++) {
+					if (m.matrix[r][c] != 0) {
+						double x = c - 14 + 0.5;
+						double y = 14 - r - 0.5;
+						double theta = Math.atan2(y, x);
+						double rad = Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
+						double newRad = factor * rad;
+						x = Math.cos(theta) * newRad;
+						y = Math.sin(theta) * newRad;
+						int row = (int) (14 - 0.5 - y);
+						int col = (int) (x + 14 - 0.5);
+						if (row >= 28) {
+							row = 27;
+						} else if (row < 0) {
+							row = 0;
+						}
+						if (col >= 28) {
+							col = 27;
+						} else if (col < 0) {
+							col = 0;
+						}
+						a.matrix[row][col] = m.matrix[r][c];
+					}
+				}
+			}
+			return a;
+		}
+		*/
 }

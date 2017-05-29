@@ -26,7 +26,9 @@ public class GUI extends JFrame {
     int rectCount = 0;
     Dimension grid = new Dimension(720, 720);
     Dimension window = new Dimension(1460, 800);
-		Network net = new Network("params/parameters9694.txt");
+	Network net1 = new Network("params/parameters9694.txt");
+	Network net2 = new Network("params/parameters9660.txt");
+	Network net3 = new Network("params/parameters9668.txt");
 
     public GUI()
     {
@@ -164,31 +166,14 @@ public class GUI extends JFrame {
             x = e.getX();
             y = e.getY();
 
-						xInput = (x - 10) / 25;
-						yInput = (y - 25) / 25;
-
-						/*
-						input[xInput][yInput] = 1.0;
-						input[xInput-1][yInput] = 0.75;
-						input[xInput+1][yInput] = 0.75;
-						input[xInput][yInput-1] = 0.75;
-						input[xInput][yInput+1] = 0.75;
-						input[xInput-1][yInput-1] = 0.5;
-						input[xInput-1][yInput+1] = 0.5;
-						input[xInput+1][yInput-1] = 0.5;
-						input[xInput+1][xInput+1] = 0.5;
-						*/
+			xInput = (x - 10) / 25;
+			yInput = (y - 25) / 25;
 
             if (input[xInput][yInput] != 1)
             {
-                input[xInput][yInput] = 1;
-								input[xInput-1][yInput] = 1;
-								input[xInput+1][yInput] = 1;
-								input[xInput][yInput-1] = 1;
-								input[xInput][yInput+1] = 1;
+				input[xInput][yInput] = 1.0;
             }
-
-
+			
             rectCount++;
             drawingPanel.repaint();
             prevInputX = xInput;
@@ -200,30 +185,12 @@ public class GUI extends JFrame {
             x = e.getX();
             y = e.getY();
 
-						xInput = (x - 10) / 25;
-						yInput = (y - 25) / 25;
-
-						/*
-						input[xInput][yInput] = 1.0;
-						input[xInput-1][yInput] = 0.75;
-						input[xInput+1][yInput] = 0.75;
-						input[xInput][yInput-1] = 0.75;
-						input[xInput][yInput+1] = 0.75;
-						input[xInput-1][yInput-1] = 0.5;
-						input[xInput-1][yInput+1] = 0.5;
-						input[xInput+1][yInput-1] = 0.5;
-						input[xInput+1][xInput+1] = 0.5;
-						*/
-
+			xInput = (x - 10) / 25;
+			yInput = (y - 25) / 25;
 
             if (input[xInput][yInput] != 1)
             {
-							input[xInput][yInput] = 1.0;
-							input[xInput-1][yInput] = 1;
-							input[xInput+1][yInput] = 1;
-							input[xInput][yInput-1] = 1;
-							input[xInput][yInput+1] = 1;
-
+				input[xInput][yInput] = 1.0;
             }
 
             rectCount++;
@@ -255,24 +222,41 @@ public class GUI extends JFrame {
     {
         public void actionPerformed(ActionEvent e)
         {
+			//transfer "input" to a Matrix object
 			Matrix in = new Matrix(28, 28, false);
 			for (int i = 0; i < 28; i++) {
 				for (int j = 0; j < 28; j++) {
 						in.matrix[i][j] = input[i][j];
 				}
 			}
-			System.out.println("X center --> " + Operations.getCenterX(in));
-			System.out.println("Y center --> " + Operations.getCenterY(in));
-			/*
-			System.out.println("Converted to matrix!");
-			in.printString();
-	Matrix out = net.feedforward(in);
-			System.out.println("Fed through network");
-			int answer = Operations.argmax(out);
-			System.out.println(answer);
 
+			in = Operations.normalize(in);
+
+			input = in.matrix;
+			drawingPanel.repaint();
+
+			//the one line to rule them all!
+			in = in.transpose();
+
+			//flatten image from 2d matrix to 1d vector
+			Matrix inFlat = new Matrix(784, 1, false);
+			for (int i = 0; i < 28; i++) {
+				for (int j = 0; j < 28; j++) {
+						inFlat.matrix[i * 28 + j][0] = in.matrix[i][j];
+				}
+			}
+
+			//feedforward through committee
+			Matrix out1 = net1.feedforward(inFlat);
+			Matrix out2 = net2.feedforward(inFlat);
+			Matrix out3 = net3.feedforward(inFlat);
+			//average classifications
+			Matrix out = out1.add(out2).add(out3).multiply_constant(0.3333);
+			//retrieve final label
+			int answer = Operations.argmax(out);
+			//set GUI output
 			outputField.setText(Integer.toString(answer));
-			*/
+
         }
     }
 
